@@ -9,6 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 fyrox_test = { path = "../game", default-features = false }
+fyrox = {version = "0.34.0"}
 
 [features]
 default = ["fyrox_test/default"]

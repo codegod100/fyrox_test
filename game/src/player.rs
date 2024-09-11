@@ -1,5 +1,8 @@
-
+use fyrox::core::reflect::GetField;
+use fyrox::generic_animation::machine::Parameter;
 use fyrox::graph::SceneGraph;
+use fyrox::scene::animation::absm::AnimationBlendingStateMachine;
+use fyrox::window::Window;
 use fyrox::{
     core::{
         algebra::{UnitQuaternion, UnitVector3, Vector3},
@@ -12,10 +15,8 @@ use fyrox::{
     event::{DeviceEvent, ElementState, Event, MouseButton, WindowEvent},
     keyboard::{KeyCode, PhysicalKey},
     scene::{node::Node, rigidbody::RigidBody},
-    script::{ScriptContext, ScriptTrait, ScriptDeinitContext},
-    
+    script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 };
-
 
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "62ae8f72-896e-412d-843c-3e24540e7f38")]
@@ -40,11 +41,18 @@ pub struct Player {
 
     #[visit(optional)]
     #[reflect(hidden)]
+    jump: bool,
+
+    #[visit(optional)]
+    #[reflect(hidden)]
     yaw: f32,
 
     #[visit(optional)]
     #[reflect(hidden)]
     pitch: f32,
+
+    absm: InheritableVariable<Handle<Node>>,
+    model_root: InheritableVariable<Handle<Node>>,
 
     #[visit(optional)]
     camera: Handle<Node>,
@@ -53,11 +61,13 @@ pub struct Player {
 impl ScriptTrait for Player {
     fn on_init(&mut self, context: &mut ScriptContext) {
         // Put initialization logic here.
+        self.yaw = 180.0;
     }
 
     fn on_start(&mut self, context: &mut ScriptContext) {
         // There should be a logic that depends on other scripts in scene.
         // It is called right after **all** scripts were initialized.
+        println!("We are starting")
     }
 
     fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
@@ -90,6 +100,7 @@ impl ScriptTrait for Player {
                     let is_pressed = event.state == ElementState::Pressed;
                     match code {
                         KeyCode::KeyW => {
+                            println!("got W");
                             self.move_forward = is_pressed;
                         }
                         KeyCode::KeyS => {
@@ -100,6 +111,9 @@ impl ScriptTrait for Player {
                         }
                         KeyCode::KeyD => {
                             self.move_right = is_pressed;
+                        }
+                        KeyCode::Space => {
+                            self.jump = is_pressed;
                         }
                         _ => (),
                     }
@@ -113,9 +127,11 @@ impl ScriptTrait for Player {
         // Put object logic here.
         let mut look_vector = Vector3::default();
         let mut side_vector = Vector3::default();
+        let mut jump_vector = Vector3::default();
         if let Some(camera) = ctx.scene.graph.try_get_mut(self.camera) {
             look_vector = camera.look_vector();
             side_vector = camera.side_vector();
+            jump_vector = camera.up_vector();
 
             let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
             let transform = camera.local_transform_mut();
@@ -130,7 +146,14 @@ impl ScriptTrait for Player {
         if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
             // Form a new velocity vector that corresponds to the pressed buttons.
             let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+            let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
+            // let transform = rigid_body.local_transform_mut();
+            // transform.set_rotation(UnitQuaternion::from_axis_angle(
+            //     &UnitVector3::new_normalize(yaw * Vector3::x()),
+            //     self.pitch.to_radians(),
+            // ) * yaw,);
             if self.move_forward {
+                println!("forward is pressed");
                 velocity += look_vector;
             }
             if self.move_backward {
@@ -142,13 +165,17 @@ impl ScriptTrait for Player {
             if self.move_right {
                 velocity -= side_vector;
             }
+            if self.jump {
+                velocity += jump_vector;
+            }
 
             let y_vel = rigid_body.lin_vel().y;
             if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
                 let movement_speed = 240.0 * ctx.dt;
+                println!("dt: {}", ctx.dt);
                 rigid_body.set_lin_vel(Vector3::new(
                     normalized_velocity.x * movement_speed,
-                    y_vel,
+                    normalized_velocity.y * 3.0,
                     normalized_velocity.z * movement_speed,
                 ));
             } else {
@@ -156,6 +183,36 @@ impl ScriptTrait for Player {
                 rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
             }
         }
+
+        let model_transform = ctx
+            .scene
+            .graph
+            .try_get_mut(*self.model_root)
+            .map(|model| model.global_transform())
+            .unwrap_or_default();
+
+        // let mut velocity = Vector3::default();
+        if let Some(state_machine) = ctx
+            .scene
+            .graph
+            .try_get_mut(*self.absm)
+            .and_then(|node| node.query_component_mut::<AnimationBlendingStateMachine>())
+        {
+            let mut moving =
+                self.move_left || self.move_right || self.move_forward || self.move_backward;
+            if  self.jump {
+                moving = false
+            }
+            println!("Moving: {}", moving);
+
+            let machine = state_machine.machine_mut().get_value_mut_silent();
+            // let val = state_machine.get;
+            // // val.get_field(name, func)
+            machine.set_parameter("walk", Parameter::Rule(moving));
+            machine.set_parameter("idle", Parameter::Rule(!moving));
+            // machine.set_parameter("attack", Parameter::Rule(self.jump));
+
+            // // val.set_parameter("idle",Parameter::Rule(!moving));
+        }
     }
 }
-    

@@ -1276,6 +1276,7 @@ dependencies = [
 name = "game_dylib"
 version = "0.1.0"
 dependencies = [
+ "fyrox",
  "fyrox_test",
 ]
 
