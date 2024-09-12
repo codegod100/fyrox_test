@@ -1,30 +1,24 @@
 use crate::player::Player;
 use fyrox::{
     core::{
-        algebra::Vector2, notify::EventKind, pool::Handle, reflect::prelude::*, uuid,
+        pool::Handle, reflect::prelude::*,
         visitor::prelude::*,
     },
     engine::GraphicsContext,
-    event::{ElementState, Event, WindowEvent},
-    graph::SceneGraph,
+    event::{Event, WindowEvent},
     gui::{
-        button::{ButtonBuilder, ButtonMessage},
         message::UiMessage,
-        text::TextBuilder,
-        widget::{WidgetBuilder, WidgetMessage},
-        UiNode, UserInterface,
+        UiNode,
     },
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
     scene::{node::Node, Scene},
-    script::{constructor::ScriptConstructorContainer, ScriptTrait},
     window::CursorGrabMode,
 };
 
 use std::{
     path::Path,
-    thread,
-    time::{self, Duration, Instant, SystemTime, UNIX_EPOCH},
+    time::{self},
 };
 
 pub mod player;

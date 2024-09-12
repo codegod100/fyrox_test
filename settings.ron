@@ -469,6 +469,27 @@
         ),
     ),
     scene_settings: {
+        "data/player/player.rgs": (
+            camera_settings: (
+                position: (0.0, 1.0, 0.0),
+                yaw: 0.0,
+                pitch: 0.0,
+            ),
+            node_infos: {
+                (
+                    index: 0,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+            },
+        ),
         "data/scene.rgs": (
             camera_settings: (
                 position: (0.23359752, 0.61171305, 1.2600844),
@@ -477,272 +498,26 @@
             ),
             node_infos: {
                 (
-                    index: 50,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 40,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 10,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 73,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 2,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 126,
-                    generation: 2,
-                ): (
-                    is_expanded: false,
-                ),
-                (
-                    index: 137,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 72,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 42,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 58,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 120,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 63,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 133,
-                    generation: 1,
-                ): (
-                    is_expanded: false,
-                ),
-                (
-                    index: 49,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 9,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 61,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 41,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 15,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 145,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 66,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 17,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 24,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 96,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 25,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
                     index: 130,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 56,
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 70,
+                    index: 32,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 58,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 89,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 39,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 13,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 69,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 46,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 128,
+                    index: 64,
                     generation: 2,
-                ): (
-                    is_expanded: false,
-                ),
-                (
-                    index: 51,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 123,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 23,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 55,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 7,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 21,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 8,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 62,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 4,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 38,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 77,
-                    generation: 1,
                 ): (
                     is_expanded: true,
                 ),
@@ -759,61 +534,13 @@
                     is_expanded: false,
                 ),
                 (
-                    index: 33,
+                    index: 47,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 20,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 32,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 36,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 122,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 124,
-                    generation: 3,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 119,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 91,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 27,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 87,
+                    index: 26,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -825,37 +552,193 @@
                     is_expanded: false,
                 ),
                 (
+                    index: 43,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 91,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 64,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 59,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 16,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 35,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 133,
+                    generation: 1,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 13,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 137,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 65,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 120,
+                    index: 76,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 121,
+                    index: 78,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 0,
+                    index: 80,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 136,
+                    index: 41,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 54,
+                    index: 27,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 55,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 9,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 72,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 12,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 22,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 10,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 38,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 87,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 70,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 49,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 21,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 4,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 63,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 122,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 24,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 119,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 77,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -873,61 +756,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 6,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 59,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 18,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 53,
-                    generation: 2,
-                ): (
-                    is_expanded: false,
-                ),
-                (
-                    index: 43,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 64,
-                    generation: 2,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 12,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 47,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 28,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 68,
+                    index: 51,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -939,25 +768,37 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 52,
+                    index: 2,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 127,
+                    index: 126,
                     generation: 2,
                 ): (
                     is_expanded: false,
                 ),
                 (
-                    index: 19,
+                    index: 61,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 22,
+                    index: 8,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 58,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 69,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -969,25 +810,25 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 29,
+                    index: 36,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 64,
+                    index: 73,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 132,
-                    generation: 1,
+                    index: 123,
+                    generation: 2,
                 ): (
-                    is_expanded: false,
+                    is_expanded: true,
                 ),
                 (
-                    index: 95,
+                    index: 23,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -999,19 +840,13 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 122,
-                    generation: 1,
+                    index: 124,
+                    generation: 3,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 26,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 88,
+                    index: 25,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1023,43 +858,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 67,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 16,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 44,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 76,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 135,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 147,
-                    generation: 2,
-                ): (
-                    is_expanded: false,
-                ),
-                (
-                    index: 37,
+                    index: 15,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1077,31 +876,43 @@
                     is_expanded: true,
                 ),
                 (
+                    index: 58,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
                     index: 31,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 78,
+                    index: 42,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 129,
-                    generation: 2,
-                ): (
-                    is_expanded: false,
-                ),
-                (
-                    index: 1,
+                    index: 17,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
                 (
-                    index: 5,
+                    index: 120,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 121,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 95,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1113,7 +924,97 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 3,
+                    index: 132,
+                    generation: 1,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 5,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 7,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 67,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 54,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 120,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 145,
+                    generation: 2,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 20,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 135,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 18,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 136,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 122,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 88,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 46,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 29,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 44,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1125,13 +1026,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 79,
-                    generation: 1,
-                ): (
-                    is_expanded: true,
-                ),
-                (
-                    index: 35,
+                    index: 19,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1143,28 +1038,133 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 80,
+                    index: 53,
+                    generation: 2,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 50,
                     generation: 1,
                 ): (
                     is_expanded: true,
                 ),
-            },
-        ),
-        "data/player/player.rgs": (
-            camera_settings: (
-                position: (0.0, 1.0, 0.0),
-                yaw: 0.0,
-                pitch: 0.0,
-            ),
-            node_infos: {
                 (
-                    index: 0,
+                    index: 127,
+                    generation: 2,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 37,
                     generation: 1,
                 ): (
                     is_expanded: true,
+                ),
+                (
+                    index: 33,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 147,
+                    generation: 2,
+                ): (
+                    is_expanded: false,
                 ),
                 (
                     index: 1,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 62,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 6,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 66,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 39,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 89,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 128,
+                    generation: 2,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 40,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 96,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 68,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 129,
+                    generation: 2,
+                ): (
+                    is_expanded: false,
+                ),
+                (
+                    index: 3,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 79,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 52,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 28,
+                    generation: 1,
+                ): (
+                    is_expanded: true,
+                ),
+                (
+                    index: 56,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1206,7 +1206,7 @@
             ),
             node_infos: {
                 (
-                    index: 1,
+                    index: 0,
                     generation: 1,
                 ): (
                     is_expanded: true,
@@ -1218,7 +1218,7 @@
                     is_expanded: true,
                 ),
                 (
-                    index: 0,
+                    index: 1,
                     generation: 1,
                 ): (
                     is_expanded: true,

@@ -1,27 +1,23 @@
-use fyrox::core::algebra::{Matrix4, Point3};
+use fyrox::core::algebra::Matrix4;
 use fyrox::core::math::frustum::Frustum;
-use fyrox::core::reflect::GetField;
 use fyrox::generic_animation::machine::Parameter;
-use fyrox::graph::{BaseSceneGraph, SceneGraph};
-use fyrox::gui::button::{ButtonBuilder, ButtonMessage};
-use fyrox::gui::message::UiMessage;
+use fyrox::graph::BaseSceneGraph;
+use fyrox::gui::button::ButtonBuilder;
 use fyrox::gui::text::TextBuilder;
 use fyrox::gui::widget::WidgetBuilder;
 use fyrox::gui::{UiNode, UserInterface};
-use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::scene::animation::absm::AnimationBlendingStateMachine;
 use fyrox::scene::graph::Graph;
-use fyrox::window::Window;
 use fyrox::{
     core::{
-        algebra::{UnitQuaternion, UnitVector3, Vector3},
+        algebra::{UnitQuaternion, Vector3},
         pool::Handle,
         reflect::prelude::*,
         type_traits::prelude::*,
         variable::InheritableVariable,
         visitor::prelude::*,
     },
-    event::{DeviceEvent, ElementState, Event, MouseButton, WindowEvent},
+    event::{DeviceEvent, ElementState, Event, WindowEvent},
     keyboard::{KeyCode, PhysicalKey},
     scene::{node::Node, rigidbody::RigidBody},
     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
