@@ -1,5 +1,6 @@
 use fyrox::core::algebra::Matrix4;
 use fyrox::core::math::frustum::Frustum;
+use fyrox::core::pool::MultiBorrowError;
 use fyrox::generic_animation::machine::Parameter;
 use fyrox::graph::BaseSceneGraph;
 use fyrox::gui::button::ButtonBuilder;
@@ -22,6 +23,9 @@ use fyrox::{
     scene::{node::Node, rigidbody::RigidBody},
     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 };
+
+use anyhow::Result;
+use thiserror::Error;
 
 use crate::Game;
 
@@ -76,21 +80,13 @@ pub struct Player {
     // #[reflect(hidden)]
     target: Handle<Node>,
 
-    quit_button_handle: Handle<UiNode>,
 }
 
-fn handle_to_node(graph: &mut Graph, handle: Handle<Node>) -> &mut Node {
-    graph.try_get_mut(handle).unwrap()
-}
 
-fn create_quit_button(ui: &mut UserInterface) -> Handle<UiNode> {
-    ButtonBuilder::new(WidgetBuilder::new())
-        .with_content(
-            TextBuilder::new(WidgetBuilder::new())
-                .with_text("forward")
-                .build(&mut ui.build_ctx()),
-        )
-        .build(&mut ui.build_ctx())
+#[derive(Error, Debug)]
+enum GameError<T>{
+        #[error("MultiBorrowError")]
+        MultiBorrow(#[from] MultiBorrowError<T>)
 }
 
 impl Player {
@@ -122,6 +118,117 @@ impl Player {
         // self.frustum =
         //     Frustum::from_view_projection_matrix(projection_matrix * view_matrix).unwrap();
         self.frustum = Frustum::from_view_projection_matrix(projection_matrix).unwrap();
+    }
+
+
+    fn do_update<T>(&mut self, ctx: &mut ScriptContext) -> Result<(), GameError<T>>
+    where GameError<T>: std::convert::From<MultiBorrowError<fyrox::scene::node::Node>> {
+        let mbc = ctx.scene.graph.begin_multi_borrow();
+        let mut look_vector = Vector3::default();
+        let mut side_vector = Vector3::default();
+        let mut jump_vector = Vector3::default();
+        let mut camera = mbc.try_get_mut(self.camera)?;
+        look_vector = camera.look_vector();
+        side_vector = camera.side_vector();
+        jump_vector = camera.up_vector();
+
+        let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
+        let transform = camera.local_transform_mut();
+        // transform.set_rotation(
+        //     UnitQuaternion::from_axis_angle(
+        //         &UnitVector3::new_normalize(yaw * Vector3::x()),
+        //         self.pitch.to_radians(),
+        //     ) * yaw,
+        // );
+
+        let mut rigid_body = mbc
+            .try_get_component_of_type_mut::<RigidBody>(ctx.handle)?;
+        // Form a new velocity vector that corresponds to the pressed buttons.
+        let mut velocity = Vector3::new(0.0, 0.0, 0.0);
+        let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
+
+        if self.move_forward {
+            velocity += look_vector;
+        }
+        if self.move_backward {
+            velocity -= look_vector;
+        }
+        if self.move_left {
+            velocity += side_vector;
+        }
+        if self.move_right {
+            velocity -= side_vector;
+        }
+        if self.jump {
+            velocity += jump_vector;
+        }
+
+        let y_vel = rigid_body.lin_vel().y;
+        if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
+            let movement_speed = 240.0 * ctx.dt;
+            rigid_body.set_lin_vel(Vector3::new(
+                normalized_velocity.x * movement_speed,
+                normalized_velocity.y * 3.0,
+                normalized_velocity.z * movement_speed,
+            ));
+        } else {
+            // Hold player in-place in XZ plane when no button is pressed.
+            rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
+        }
+
+        let mut moving =
+            self.move_left || self.move_right || self.move_forward || self.move_backward;
+        if self.jump {
+            moving = false
+        }
+
+
+        let model_root = mbc.try_get(*self.model_root)?;
+
+        println!("model root");
+        let target = mbc.try_get(self.target)?;
+        println!("target");
+        let p = target
+            .global_position()
+            .metric_distance(&model_root.global_position());
+        // let p = 0.0;
+        let close_to_target = p < 1.5;
+
+        let mut state_machine = mbc
+            .try_get_component_of_type_mut::<AnimationBlendingStateMachine>(*self.absm)?;
+        let machine = state_machine.machine_mut().get_value_mut_silent();
+        machine.set_parameter("walk", Parameter::Rule(moving));
+        machine.set_parameter("idle", Parameter::Rule(!moving));
+        machine.set_parameter("attack", Parameter::Rule(self.fight));
+
+        if close_to_target {
+            println!("CLOSE");
+            machine.set_parameter("attack", Parameter::Rule(true));
+        }
+
+        // // val.set_parameter("idle",Parameter::Rule(!moving));
+
+        let position = rigid_body.global_position();
+        let up_vector = rigid_body.up_vector();
+        let look_vector = rigid_body.look_vector();
+
+        // Update the viewing frustum.
+        self.update_frustum(position, look_vector, up_vector, 20.0);
+
+        // if self.target.is_none() {
+        //     for (handle, node) in ctx.scene.graph.pair_iter() {
+        //         if node.has_script::<Player>()
+        //             && self.frustum.is_contains_point(node.global_position())
+        //         {
+        //             self.target = handle;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // A helper flag, that tells the bot that it is close enough to a target for melee
+        // attack.
+        Ok(())
     }
 }
 
@@ -195,109 +302,7 @@ impl ScriptTrait for Player {
 
     fn on_update(&mut self, ctx: &mut ScriptContext) {
         // Put object logic here.
-        let mbc = ctx.scene.graph.begin_multi_borrow();
-        let mut look_vector = Vector3::default();
-        let mut side_vector = Vector3::default();
-        let mut jump_vector = Vector3::default();
-        let mut camera = mbc.try_get_mut(self.camera).unwrap();
-        look_vector = camera.look_vector();
-        side_vector = camera.side_vector();
-        jump_vector = camera.up_vector();
 
-        let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
-        let transform = camera.local_transform_mut();
-        // transform.set_rotation(
-        //     UnitQuaternion::from_axis_angle(
-        //         &UnitVector3::new_normalize(yaw * Vector3::x()),
-        //         self.pitch.to_radians(),
-        //     ) * yaw,
-        // );
-
-        let mut rigid_body = mbc.try_get_component_of_type_mut::<RigidBody>(ctx.handle).unwrap();
-        // Form a new velocity vector that corresponds to the pressed buttons.
-        let mut velocity = Vector3::new(0.0, 0.0, 0.0);
-        let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
-
-        if self.move_forward {
-            velocity += look_vector;
-        }
-        if self.move_backward {
-            velocity -= look_vector;
-        }
-        if self.move_left {
-            velocity += side_vector;
-        }
-        if self.move_right {
-            velocity -= side_vector;
-        }
-        if self.jump {
-            velocity += jump_vector;
-        }
-
-        let y_vel = rigid_body.lin_vel().y;
-        if let Some(normalized_velocity) = velocity.try_normalize(f32::EPSILON) {
-            let movement_speed = 240.0 * ctx.dt;
-            rigid_body.set_lin_vel(Vector3::new(
-                normalized_velocity.x * movement_speed,
-                normalized_velocity.y * 3.0,
-                normalized_velocity.z * movement_speed,
-            ));
-        } else {
-            // Hold player in-place in XZ plane when no button is pressed.
-            rigid_body.set_lin_vel(Vector3::new(0.0, y_vel, 0.0));
-        }
-
-        let mut moving =
-            self.move_left || self.move_right || self.move_forward || self.move_backward;
-        if self.jump {
-            moving = false
-        }
-
-        let mut close_to_target = false;
-
-        let model_root = mbc.try_get(*self.model_root).unwrap();
-
-        println!("model root");
-        let target = mbc.try_get(self.target).unwrap();
-        println!("target");
-        let p = target
-            .global_position()
-            .metric_distance(&model_root.global_position());
-        // let p = 0.0;
-        close_to_target = p < 1.5;
-
-        let mut state_machine = mbc.try_get_component_of_type_mut::<AnimationBlendingStateMachine>(*self.absm).unwrap();
-        let machine = state_machine.machine_mut().get_value_mut_silent();
-        machine.set_parameter("walk", Parameter::Rule(moving));
-        machine.set_parameter("idle", Parameter::Rule(!moving));
-        machine.set_parameter("attack", Parameter::Rule(self.fight));
-
-        if close_to_target {
-            println!("CLOSE");
-            machine.set_parameter("attack", Parameter::Rule(true));
-        }
-
-        // // val.set_parameter("idle",Parameter::Rule(!moving));
-
-        let position = rigid_body.global_position();
-        let up_vector = rigid_body.up_vector();
-        let look_vector = rigid_body.look_vector();
-
-        // Update the viewing frustum.
-        self.update_frustum(position, look_vector, up_vector, 20.0);
-
-        // if self.target.is_none() {
-        //     for (handle, node) in ctx.scene.graph.pair_iter() {
-        //         if node.has_script::<Player>()
-        //             && self.frustum.is_contains_point(node.global_position())
-        //         {
-        //             self.target = handle;
-        //             break;
-        //         }
-        //     }
-        // }
-
-        // A helper flag, that tells the bot that it is close enough to a target for melee
-        // attack.
+        self.do_update(ctx).unwrap();
     }
 }

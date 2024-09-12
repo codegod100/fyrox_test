@@ -5,7 +5,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.88"
 fyrox = {workspace = true}
+thiserror = "1.0.63"
 
 [features]
 default = ["fyrox/default"]
