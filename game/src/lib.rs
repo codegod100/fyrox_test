@@ -1,19 +1,31 @@
 use crate::player::Player;
 use fyrox::{
-    core::{pool::Handle, reflect::prelude::*, visitor::prelude::*},
+    core::{notify::EventKind, pool::Handle, reflect::prelude::*, uuid, visitor::prelude::*},
     engine::GraphicsContext,
     event::{ElementState, Event, WindowEvent},
-    gui::message::UiMessage,
+    graph::SceneGraph,
+    gui::{
+        button::{ButtonBuilder, ButtonMessage},
+        message::UiMessage,
+        text::TextBuilder,
+        widget::{WidgetBuilder, WidgetMessage},
+        UiNode, UserInterface,
+    },
     keyboard::{KeyCode, PhysicalKey},
     plugin::{Plugin, PluginContext, PluginRegistrationContext},
-    scene::Scene,
+    scene::{node::Node, Scene},
+    script::{constructor::ScriptConstructorContainer, ScriptTrait},
     window::CursorGrabMode,
 };
 
-use std::path::Path;
+use std::{path::Path, thread, time};
 
 pub mod player;
 // pub mod weapon;
+
+enum Message {
+    Forward,
+}
 
 #[derive(Default, Visit, Reflect, Debug)]
 pub struct Game {
@@ -22,7 +34,26 @@ pub struct Game {
     #[visit(optional)]
     #[reflect(hidden)]
     cursor_released: bool,
+
+    quit_button_handle: Handle<UiNode>,
+    player: Handle<Node>,
 }
+
+fn create_quit_button(ui: &mut UserInterface) -> Handle<UiNode> {
+    ButtonBuilder::new(WidgetBuilder::new().with_width(100.0).with_height(100.0))
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("forward")
+                .build(&mut ui.build_ctx()),
+        )
+        .build(&mut ui.build_ctx())
+}
+
+// impl Game {
+//     fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
+//         self.quit_button_handle =  create_quit_button(context.user_interfaces.first_mut());
+//     }
+// }
 
 impl Plugin for Game {
     fn on_graphics_context_initialized(&mut self, context: PluginContext) {
@@ -31,21 +62,32 @@ impl Plugin for Game {
         let graphics_context = context.graphics_context.as_initialized_mut();
         let window = &graphics_context.window;
         window.set_title("My Cool Game");
-        window
-            .set_cursor_grab(CursorGrabMode::Confined).unwrap();
-        window.set_cursor_visible(false);
+        // window
+        //     .set_cursor_grab(CursorGrabMode::Confined).unwrap();
+        // window.set_cursor_visible(false);
     }
 
     fn register(&self, context: PluginRegistrationContext) {
         println!("Adding player");
         // Register your scripts here.
-        context
-            .serialization_context
-            .script_constructors
-            .add::<Player>("Player");
+        let c = &context.serialization_context.script_constructors;
+
+        c.add::<Player>("Player");
+
+        let u = uuid!("62ae8f72-896e-412d-843c-3e24540e7f38");
+        let Some(s) = c.try_create(&u) else {
+            return;
+        };
+        println!("script: {:#?}", s);
+        let Some(p) = s.cast::<Player>() else {
+            return;
+        };
+        println!("Got player: {:#?}", p);
     }
 
     fn init(&mut self, scene_path: Option<&str>, context: PluginContext) {
+        // println!("game init");
+        self.quit_button_handle = create_quit_button(context.user_interfaces.first_mut());
         context
             .async_scene_loader
             .request(scene_path.unwrap_or("data/scene.rgs"));
@@ -78,7 +120,7 @@ impl Plugin for Game {
                     if let PhysicalKey::Code(code) = event.physical_key {
                         match code {
                             KeyCode::KeyG => {
-                                println!("Cursor is currently {}",self.cursor_released);
+                                println!("Cursor is currently {}", self.cursor_released);
                                 window.set_cursor_grab(CursorGrabMode::None).unwrap();
                                 if self.cursor_released {
                                     // window.set_cursor_grab(CursorGrabMode::Confined).unwrap();
@@ -97,8 +139,23 @@ impl Plugin for Game {
         }
     }
 
-    fn on_ui_message(&mut self, _context: &mut PluginContext, _message: &UiMessage) {
-        // Handle UI events here.
+    fn on_ui_message(&mut self, context: &mut PluginContext, message: &UiMessage) {
+        println!("data {:#?}", message);
+        if let Some(scene) = context.scenes.try_get_mut(self.scene) {
+            let p = scene.graph.try_get_script_of_mut::<Player>(self.player).unwrap();
+            // println!("{:#?}",p);
+            println!("DT: {}",context.dt);
+            // p.move_forward = true;
+
+            // p.move_forward = false;
+            if let Some(WidgetMessage::MouseDown { pos, button }) = message.data() {
+                println!("MOUSE DOWN");
+                p.move_forward = true;
+            }
+            if let Some(WidgetMessage::MouseUp { pos, button }) = message.data(){
+                p.move_forward = false;
+            }
+        }
     }
 
     fn on_scene_begin_loading(&mut self, _path: &Path, ctx: &mut PluginContext) {

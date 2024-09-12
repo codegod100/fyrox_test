@@ -1,6 +1,12 @@
 use fyrox::core::reflect::GetField;
 use fyrox::generic_animation::machine::Parameter;
 use fyrox::graph::SceneGraph;
+use fyrox::gui::button::{ButtonBuilder, ButtonMessage};
+use fyrox::gui::message::UiMessage;
+use fyrox::gui::text::TextBuilder;
+use fyrox::gui::widget::WidgetBuilder;
+use fyrox::gui::{UiNode, UserInterface};
+use fyrox::plugin::{Plugin, PluginContext};
 use fyrox::scene::animation::absm::AnimationBlendingStateMachine;
 use fyrox::window::Window;
 use fyrox::{
@@ -18,6 +24,8 @@ use fyrox::{
     script::{ScriptContext, ScriptDeinitContext, ScriptTrait},
 };
 
+use crate::Game;
+
 #[derive(Visit, Reflect, Default, Debug, Clone, TypeUuidProvider, ComponentProvider)]
 #[type_uuid(id = "62ae8f72-896e-412d-843c-3e24540e7f38")]
 #[visit(optional)]
@@ -25,7 +33,7 @@ pub struct Player {
     // Add fields here.
     #[visit(optional)]
     #[reflect(hidden)]
-    move_forward: bool,
+    pub move_forward: bool,
 
     #[visit(optional)]
     #[reflect(hidden)]
@@ -56,18 +64,35 @@ pub struct Player {
 
     #[visit(optional)]
     camera: Handle<Node>,
+
+    quit_button_handle: Handle<UiNode>,
+}
+fn create_quit_button(ui: &mut UserInterface) -> Handle<UiNode> {
+    ButtonBuilder::new(WidgetBuilder::new())
+        .with_content(
+            TextBuilder::new(WidgetBuilder::new())
+                .with_text("forward")
+                .build(&mut ui.build_ctx()),
+        )
+        .build(&mut ui.build_ctx())
 }
 
+
+
 impl ScriptTrait for Player {
+
     fn on_init(&mut self, context: &mut ScriptContext) {
         // Put initialization logic here.
         self.yaw = 180.0;
+        // self.quit_button_handle =  create_quit_button(context.user_interfaces.first_mut());
+
     }
 
     fn on_start(&mut self, context: &mut ScriptContext) {
         // There should be a logic that depends on other scripts in scene.
         // It is called right after **all** scripts were initialized.
-        println!("We are starting")
+        println!("We are starting");
+        context.plugins.get_mut::<Game>().player = context.handle;
     }
 
     fn on_deinit(&mut self, context: &mut ScriptDeinitContext) {
@@ -123,6 +148,8 @@ impl ScriptTrait for Player {
         }
     }
 
+
+
     fn on_update(&mut self, ctx: &mut ScriptContext) {
         // Put object logic here.
         let mut look_vector = Vector3::default();
@@ -135,12 +162,12 @@ impl ScriptTrait for Player {
 
             let yaw = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), self.yaw.to_radians());
             let transform = camera.local_transform_mut();
-            transform.set_rotation(
-                UnitQuaternion::from_axis_angle(
-                    &UnitVector3::new_normalize(yaw * Vector3::x()),
-                    self.pitch.to_radians(),
-                ) * yaw,
-            );
+            // transform.set_rotation(
+            //     UnitQuaternion::from_axis_angle(
+            //         &UnitVector3::new_normalize(yaw * Vector3::x()),
+            //         self.pitch.to_radians(),
+            //     ) * yaw,
+            // );
         }
 
         if let Some(rigid_body) = ctx.scene.graph.try_get_mut_of_type::<RigidBody>(ctx.handle) {
@@ -203,7 +230,7 @@ impl ScriptTrait for Player {
             if  self.jump {
                 moving = false
             }
-            println!("Moving: {}", moving);
+            // println!("Moving: {}", moving);
 
             let machine = state_machine.machine_mut().get_value_mut_silent();
             // let val = state_machine.get;
